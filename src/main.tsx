@@ -31,7 +31,7 @@ Devvit.addCustomPostType({
   name: 'Experience Post',
   height: 'regular',
   render: (_context) => {
-    const [screen, setScreen] = useState<'start' | 'basement'>('start');
+    const [screen, setScreen] = useState<'start' | 'basement' | 'living_room'>('start');
 
     if (screen === 'start') {
       return (
@@ -50,11 +50,11 @@ Devvit.addCustomPostType({
           </button>
         </vstack>
       );
-    } else {
+    } else if (screen === 'basement') {
       return (
         <zstack height="100%" width="100%" alignment="center middle">
           <image
-            url="rooms\basement.png"
+            url="basement.png"
             description="basement background"
             imageWidth={800}
             imageHeight={600}
@@ -73,14 +73,49 @@ Devvit.addCustomPostType({
               <button appearance="secondary" onPress={() => console.log("Look around pressed")}>
                 Look around
               </button>
-              <button appearance="secondary" onPress={() => console.log("Move on pressed")}>
-                Move on
+              <button appearance="secondary" onPress={() => setScreen('living_room')}>
+                Go to the living room
+              </button>
+            </hstack>
+          </vstack>
+        </zstack>
+      );
+    } else if (screen === 'living_room') {
+      return (
+        <zstack height="100%" width="100%" alignment="center middle">
+          <image
+            url="living_room.png"
+            description="living room background"
+            imageWidth={800}
+            imageHeight={600}
+            width="100%"
+            height="100%"
+            resizeMode="cover"
+          />
+          <vstack gap="medium" alignment="middle center">
+            <text size="large" weight="bold" color="white">
+              You are in the living room.
+            </text>
+            <text size="medium" color="white">
+              You see a cozy sofa and a flickering TV. What will you do?
+            </text>
+            <hstack gap="small">
+              <button appearance="secondary" onPress={() => console.log("Sit on sofa pressed")}>
+                Sit on the sofa
+              </button>
+              <button appearance="secondary" onPress={() => setScreen('basement')}>
+                Back to the basement
               </button>
             </hstack>
           </vstack>
         </zstack>
       );
     }
+    return (
+      <blocks>
+        <text>Unknown screen state</text>
+      </blocks>
+    );
   },
 });
 
