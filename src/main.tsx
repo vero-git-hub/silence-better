@@ -1,11 +1,9 @@
-// Learn more at developers.reddit.com/docs
 import { Devvit, useState } from '@devvit/public-api';
 
 Devvit.configure({
   redditAPI: true,
 });
 
-// Add a menu item to the subreddit menu for instantiating the new experience post
 Devvit.addMenuItem({
   label: 'Add my post',
   location: 'subreddit',
@@ -29,26 +27,25 @@ Devvit.addMenuItem({
   },
 });
 
-// Add a post type definition
 Devvit.addCustomPostType({
   name: 'Experience Post',
   height: 'regular',
   render: (_context) => {
-    const [counter, setCounter] = useState(0);
-
     return (
       <vstack height="100%" width="100%" gap="medium" alignment="center middle">
         <image
-          url="logo.png"
+          url="silent-better.png"
           description="logo"
           imageHeight={256}
           imageWidth={256}
-          height="48px"
-          width="48px"
+          height="215px"
+          width="248px"
         />
-        <text size="large">{`Click counter: ${counter}`}</text>
-        <button appearance="primary" onPress={() => setCounter((counter) => counter + 1)}>
-          Click me!
+        <text size="large">Welcome to Silent Better Game!</text>
+        <button appearance="primary" onPress={() => {
+          console.log("Start Game clicked!");
+        }}>
+          Start Game
         </button>
       </vstack>
     );
