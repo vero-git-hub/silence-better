@@ -31,7 +31,7 @@ Devvit.addCustomPostType({
   name: 'Experience Post',
   height: 'regular',
   render: (_context) => {
-    const [screen, setScreen] = useState<'start' | 'basement' | 'living_room'>('start');
+    const [screen, setScreen] = useState<'start' | 'basement' | 'living_room' | 'attic'>('start');
 
     if (screen === 'start') {
       return (
@@ -105,6 +105,42 @@ Devvit.addCustomPostType({
               </button>
               <button appearance="secondary" onPress={() => setScreen('basement')}>
                 Back to the basement
+              </button>
+              <button appearance="secondary" onPress={() => setScreen('attic')}>
+                Go to the attic
+              </button>
+            </hstack>
+          </vstack>
+        </zstack>
+      );
+    } else if (screen === 'attic') {
+      return (
+        <zstack height="100%" width="100%" alignment="center middle">
+          <image
+            url="attic.png"
+            description="attic background"
+            imageWidth={800}
+            imageHeight={600}
+            width="100%"
+            height="100%"
+            resizeMode="cover"
+          />
+          <vstack gap="medium" alignment="middle center">
+            <text size="large" weight="bold" color="white">
+              You are in the attic.
+            </text>
+            <text size="medium" color="white">
+              Dusty boxes and old memories surround you. What now?
+            </text>
+            <hstack gap="small">
+              <button appearance="secondary" onPress={() => console.log("Open a box pressed")}>
+                Open a box
+              </button>
+              <button appearance="secondary" onPress={() => setScreen('basement')}>
+                Go back to basement
+              </button>
+              <button appearance="secondary" onPress={() => setScreen('living_room')}>
+                Go to living room
               </button>
             </hstack>
           </vstack>
