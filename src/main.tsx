@@ -67,7 +67,7 @@ Devvit.addCustomPostType({
   name: 'Experience Post',
   height: 'regular',
   render: (_context) => {
-    const [screen, setScreen] = useState<'start' | 'basement' | 'living_room' | 'attic'| 'defeat'| 'ghost_list' | 'guess'>('start');
+    const [screen, setScreen] = useState<'start' | 'basement' | 'living_room' | 'attic'| 'defeat'| 'ghost_list' | 'guess' | 'victory'>('start');
     const [noiseLevel, setNoiseLevel] = useState(0);
 
     const [usedBasementHint, setUsedBasementHint] = useState(false);
@@ -268,7 +268,7 @@ Devvit.addCustomPostType({
                   appearance="secondary"
                   onPress={() => {
                     if (chosenGhostIndex === index) {
-                      console.log("You guessed the ghost correctly!");
+                      setScreen('victory');
                     } else {
                       console.log("You guessed the wrong ghost.");
                     }
@@ -282,6 +282,34 @@ Devvit.addCustomPostType({
                 onPress={() => setScreen('basement')}
               >
                 Back to the basement
+              </button>
+            </vstack>
+          </zstack>
+        );
+    } else if (screen === 'victory') {
+        return (
+          <zstack height="100%" width="100%" alignment="center middle">
+            <image
+              url="victory.png"
+              description="victory background"
+              imageWidth={800}
+              imageHeight={600}
+              width="100%"
+              height="100%"
+              resizeMode="cover"
+            />
+            <vstack gap="medium" alignment="middle center">
+              <text size="large" weight="bold" color="gold">
+                Congratulations! You have identified the ghost!
+              </text>
+              <text size="medium" color="white">
+                The ghost was {ghosts[chosenGhostIndex!].name}.
+              </text>
+              <button
+                appearance="primary"
+                onPress={() => setScreen('start')}
+              >
+                Play Again
               </button>
             </vstack>
           </zstack>
