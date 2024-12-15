@@ -34,6 +34,10 @@ Devvit.addCustomPostType({
     const [screen, setScreen] = useState<'start' | 'basement' | 'living_room' | 'attic'| 'defeat'>('start');
     const [noiseLevel, setNoiseLevel] = useState(0);
 
+    const [usedBasementHint, setUsedBasementHint] = useState(false);
+    const [usedLivingRoomHint, setUsedLivingRoomHint] = useState(false);
+    const [usedAtticHint, setUsedAtticHint] = useState(false);
+
     const NoiseIndicator = () => (
       <hstack width="100%" alignment="start middle" padding="small">
         <text size="medium" color="white">{`Noise level: ${noiseLevel}%`}</text>
@@ -47,6 +51,21 @@ Devvit.addCustomPostType({
           setScreen('defeat');
         }
         return newLvl;
+      });
+    }
+
+    function goToRoom(newRoom: 'basement' | 'living_room' | 'attic') {
+      setScreen((oldRoom) => {
+        if (oldRoom !== 'start') {
+          if (newRoom === 'basement' && usedBasementHint) {
+            increaseNoise(1); 
+          } else if (newRoom === 'living_room' && usedLivingRoomHint) {
+            increaseNoise(1);
+          } else if (newRoom === 'attic' && usedAtticHint) {
+            increaseNoise(1);
+          }
+        }
+        return newRoom;
       });
     }
 
@@ -65,6 +84,9 @@ Devvit.addCustomPostType({
           <button appearance="primary" onPress={() => {
             setScreen('basement');
             setNoiseLevel(0);
+            setUsedBasementHint(false);
+            setUsedLivingRoomHint(false);
+            setUsedAtticHint(false);
           }}>
             Start Game
           </button>
@@ -93,12 +115,20 @@ Devvit.addCustomPostType({
             <hstack gap="small">
               <button appearance="secondary" onPress={() => {
                 console.log("Look around pressed");
-                increaseNoise(3);
+                if (!usedBasementHint) {
+                  increaseNoise(3);
+                  setUsedBasementHint(true);
+                } else {
+                  console.log("You already looked around here.");
+                }
               }}>
                 Look around
               </button>
-              <button appearance="secondary" onPress={() => setScreen('living_room')}>
+              <button appearance="secondary" onPress={() => goToRoom('living_room')}>
                 Go to the living room
+              </button>
+              <button appearance="secondary" onPress={() => goToRoom('attic')}>
+                Go to the attic
               </button>
             </hstack>
           </vstack>
@@ -126,15 +156,19 @@ Devvit.addCustomPostType({
             </text>
             <hstack gap="small">
               <button appearance="secondary" onPress={() => {
-                console.log("Sit on sofa pressed")
-                increaseNoise(2);
+                if (!usedLivingRoomHint) {
+                  increaseNoise(2);
+                  setUsedLivingRoomHint(true);
+                } else {
+                  console.log("You already sat on the sofa here.");
+                }
               }}>
                 Sit on the sofa
               </button>
-              <button appearance="secondary" onPress={() => setScreen('basement')}>
+              <button appearance="secondary" onPress={() => goToRoom('basement')}>
                 Back to the basement
               </button>
-              <button appearance="secondary" onPress={() => setScreen('attic')}>
+              <button appearance="secondary" onPress={() => goToRoom('attic')}>
                 Go to the attic
               </button>
             </hstack>
@@ -164,14 +198,19 @@ Devvit.addCustomPostType({
             <hstack gap="small">
               <button appearance="secondary" onPress={() => {
                 console.log("Open a box pressed");
-                increaseNoise(1);
+                if (!usedAtticHint) {
+                  increaseNoise(1);
+                  setUsedAtticHint(true);
+                } else {
+                  console.log("You already opened a box here.");
+                }
               }}>
                 Open a box
               </button>
-              <button appearance="secondary" onPress={() => setScreen('basement')}>
+              <button appearance="secondary" onPress={() => goToRoom('basement')}>
                 Go back to basement
               </button>
-              <button appearance="secondary" onPress={() => setScreen('living_room')}>
+              <button appearance="secondary" onPress={() => goToRoom('living_room')}>
                 Go to living room
               </button>
             </hstack>
@@ -187,6 +226,9 @@ Devvit.addCustomPostType({
           <button appearance="primary" onPress={() => {
             setScreen('start');
             setNoiseLevel(0);
+            setUsedBasementHint(false);
+            setUsedLivingRoomHint(false);
+            setUsedAtticHint(false);
           }}>
             Restart
           </button>
