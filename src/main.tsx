@@ -2,6 +2,7 @@ import { Devvit, useState } from '@devvit/public-api';
 import { ghosts } from './data.js';
 import { shuffleArray } from './utils.js';
 import { NoiseIndicator } from './components/NoiseIndicator.js';
+import { StartScreen } from './components/StartScreen.js';
 
 Devvit.configure({
   redditAPI: true,
@@ -111,23 +112,10 @@ Devvit.addCustomPostType({
 
     if (screen === 'start') {
       return (
-        <vstack height="100%" width="100%" gap="medium" alignment="center middle">
-          <image
-            url="silent-better.png"
-            description="logo"
-            imageHeight={256}
-            imageWidth={256}
-            height="157px"
-            width="248px"
-          />
-          <text size="large">Welcome to Silence Better Game!</text>
-          <button appearance="primary" onPress={startGame}>
-            Start Game
-          </button>
-          <button appearance="secondary" onPress={() => setScreen('ghost_list')}>
-            View Ghosts
-          </button>
-        </vstack>
+        <StartScreen
+          onStartGame={startGame}
+          onViewGhosts={() => setScreen('ghost_list')}
+        />
       );
     } else if (screen === 'ghost_list') {
       const ghost = ghosts[ghostIndex];
