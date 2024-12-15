@@ -67,7 +67,7 @@ Devvit.addCustomPostType({
   name: 'Experience Post',
   height: 'regular',
   render: (_context) => {
-    const [screen, setScreen] = useState<'start' | 'basement' | 'living_room' | 'attic'| 'defeat'| 'ghost_list'>('start');
+    const [screen, setScreen] = useState<'start' | 'basement' | 'living_room' | 'attic'| 'defeat'| 'ghost_list' | 'guess'>('start');
     const [noiseLevel, setNoiseLevel] = useState(0);
 
     const [usedBasementHint, setUsedBasementHint] = useState(false);
@@ -232,12 +232,60 @@ Devvit.addCustomPostType({
                 Go to the attic
               </button>
             </hstack>
+            <hstack gap="small">
+              <button
+                appearance="primary"
+                onPress={() => setScreen('guess')}
+              >
+                Guess the ghost
+              </button>
+            </hstack>
             {usedBasementHint && (
               <text size="medium" color="yellow">{randomizedClues[0]}</text>
             )}
           </vstack>
         </zstack>
       );
+    } else if (screen === 'guess') {
+        return (
+          <zstack height="100%" width="100%" alignment="center middle">
+            <image
+              url="guess_background.png"
+              description="guessing background"
+              imageWidth={800}
+              imageHeight={600}
+              width="100%"
+              height="100%"
+              resizeMode="cover"
+            />
+            <vstack gap="medium" alignment="middle center">
+              <text size="large" weight="bold" color="white">
+                Who is haunting this house?
+              </text>
+              {ghosts.map((ghost, index) => (
+                <button
+                  key={index.toString()}
+                  appearance="secondary"
+                  onPress={() => {
+                    if (chosenGhostIndex === index) {
+                      console.log("You guessed the ghost correctly!");
+                    } else {
+                      console.log("You guessed the wrong ghost.");
+                    }
+                  }}
+                >
+                  {ghost.name}
+                </button>
+              ))}
+              <button
+                appearance="secondary"
+                onPress={() => setScreen('basement')}
+              >
+                Back to the basement
+              </button>
+            </vstack>
+          </zstack>
+        );
     } else if (screen === 'living_room') {
       return (
         <zstack height="100%" width="100%" alignment="center middle">
