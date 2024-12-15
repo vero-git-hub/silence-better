@@ -40,7 +40,7 @@ const ghosts: GhostInfo[] = [
     clues: [
       "Whispers phrases",
       "Can pretend to be the Sandman",
-      "Unique (U): Repeats whisper again"
+      "Repeats whisper again"
     ],
   },
   {
@@ -49,7 +49,7 @@ const ghosts: GhostInfo[] = [
     clues: [
       "Does not reflect in mirrors",
       "Can pretend to be another ghost",
-      "Unique (U): A grey hair"
+      "A grey hair"
     ],
   },
   {
@@ -58,7 +58,7 @@ const ghosts: GhostInfo[] = [
     clues: [
       "Does not reflect in mirrors",
       "Leaves sand",
-      "Unique (U): Plays with time"
+      "Plays with time"
     ],
   },
 ];
@@ -75,6 +75,10 @@ Devvit.addCustomPostType({
     const [usedAtticHint, setUsedAtticHint] = useState(false);
 
     const [chosenGhostIndex, setChosenGhostIndex] = useState<number | null>(null);
+
+    const [basementClueMessage, setBasementClueMessage] = useState<string | null>(null);
+    const [livingRoomClueMessage, setLivingRoomClueMessage] = useState<string | null>(null);
+    const [atticClueMessage, setAtticClueMessage] = useState<string | null>(null);
 
     const [ghostIndex, setGhostIndex] = useState(0);
 
@@ -131,6 +135,9 @@ Devvit.addCustomPostType({
             setUsedBasementHint(false);
             setUsedLivingRoomHint(false);
             setUsedAtticHint(false);
+            setBasementClueMessage(null);
+            setLivingRoomClueMessage(null);
+            setAtticClueMessage(null);
           }}>
             Start Game
           </button>
@@ -202,9 +209,10 @@ Devvit.addCustomPostType({
             <hstack gap="small">
               <button appearance="secondary" onPress={() => {
                 console.log("Look around pressed");
-                if (!usedBasementHint) {
+                if (!usedBasementHint && chosenGhostIndex !== null) {
                   increaseNoise(3);
                   setUsedBasementHint(true);
+                  setBasementClueMessage(ghosts[chosenGhostIndex].clues[0]);
                 } else {
                   console.log("You already looked around here.");
                 }
@@ -218,6 +226,11 @@ Devvit.addCustomPostType({
                 Go to the attic
               </button>
             </hstack>
+            {basementClueMessage && (
+              <vstack padding="small">
+                <text size="medium" color="yellow">Hint found: {basementClueMessage}</text>
+              </vstack>
+            )}
           </vstack>
         </zstack>
       );
@@ -243,9 +256,10 @@ Devvit.addCustomPostType({
             </text>
             <hstack gap="small">
               <button appearance="secondary" onPress={() => {
-                if (!usedLivingRoomHint) {
+                if (!usedLivingRoomHint && chosenGhostIndex !== null) {
                   increaseNoise(2);
                   setUsedLivingRoomHint(true);
+                  setLivingRoomClueMessage(ghosts[chosenGhostIndex].clues[1]);
                 } else {
                   console.log("You already sat on the sofa here.");
                 }
@@ -259,6 +273,11 @@ Devvit.addCustomPostType({
                 Go to the attic
               </button>
             </hstack>
+            {livingRoomClueMessage && (
+              <vstack padding="small">
+                <text size="medium" color="yellow">Hint found: {livingRoomClueMessage}</text>
+              </vstack>
+            )}
           </vstack>
         </zstack>
       );
@@ -285,9 +304,10 @@ Devvit.addCustomPostType({
             <hstack gap="small">
               <button appearance="secondary" onPress={() => {
                 console.log("Open a box pressed");
-                if (!usedAtticHint) {
+                if (!usedAtticHint && chosenGhostIndex !== null) {
                   increaseNoise(1);
                   setUsedAtticHint(true);
+                  setAtticClueMessage(ghosts[chosenGhostIndex].clues[2]);
                 } else {
                   console.log("You already opened a box here.");
                 }
@@ -301,6 +321,11 @@ Devvit.addCustomPostType({
                 Go to living room
               </button>
             </hstack>
+            {atticClueMessage && (
+              <vstack padding="small">
+                <text size="medium" color="yellow">Hint found: {atticClueMessage}</text>
+              </vstack>
+            )}
           </vstack>
         </zstack>
       );
