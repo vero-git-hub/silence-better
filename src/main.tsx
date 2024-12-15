@@ -27,16 +27,54 @@ Devvit.addMenuItem({
   },
 });
 
+type GhostInfo = {
+  name: string;
+  image: string;
+  clues: string[];
+};
+
+const ghosts: GhostInfo[] = [
+  {
+    name: "Whisperer",
+    image: "whisperer.png",
+    clues: [
+      "Whispers phrases",
+      "Can pretend to be the Sandman",
+      "Unique (U): Repeats whisper again"
+    ],
+  },
+  {
+    name: "Sage",
+    image: "sage.png",
+    clues: [
+      "Does not reflect in mirrors",
+      "Can pretend to be another ghost",
+      "Unique (U): A grey hair"
+    ],
+  },
+  {
+    name: "Sandman",
+    image: "sandman.png",
+    clues: [
+      "Does not reflect in mirrors",
+      "Leaves sand",
+      "Unique (U): Plays with time"
+    ],
+  },
+];
+
 Devvit.addCustomPostType({
   name: 'Experience Post',
   height: 'regular',
   render: (_context) => {
-    const [screen, setScreen] = useState<'start' | 'basement' | 'living_room' | 'attic'| 'defeat'>('start');
+    const [screen, setScreen] = useState<'start' | 'basement' | 'living_room' | 'attic'| 'defeat'| 'ghost_list'>('start');
     const [noiseLevel, setNoiseLevel] = useState(0);
 
     const [usedBasementHint, setUsedBasementHint] = useState(false);
     const [usedLivingRoomHint, setUsedLivingRoomHint] = useState(false);
     const [usedAtticHint, setUsedAtticHint] = useState(false);
+
+    const [ghostIndex, setGhostIndex] = useState(0);
 
     const NoiseIndicator = () => (
       <hstack width="100%" alignment="start middle" padding="small">
@@ -77,7 +115,7 @@ Devvit.addCustomPostType({
             description="logo"
             imageHeight={256}
             imageWidth={256}
-            height="215px"
+            height="157px"
             width="248px"
           />
           <text size="large">Welcome to Silent Better Game!</text>
@@ -90,6 +128,49 @@ Devvit.addCustomPostType({
           }}>
             Start Game
           </button>
+          <button appearance="secondary" onPress={() => setScreen('ghost_list')}>
+            View Ghosts
+          </button>
+        </vstack>
+      );
+    } else if (screen === 'ghost_list') {
+      const ghost = ghosts[ghostIndex];
+
+      return (
+        <vstack height="100%" width="100%" gap="medium" alignment="top center" padding="medium">
+          <hstack gap="small" alignment="center middle">
+            <button appearance="secondary" onPress={() => setScreen('start')}>
+              Back
+            </button>
+            <text size="xlarge" weight="bold">Ghosts Information</text>
+          </hstack>
+          
+          <spacer size="medium" />
+          <hstack gap="medium" alignment="top center" width="100%" grow>
+            <image
+              url={ghost.image}
+              description={ghost.name}
+              imageWidth={256}
+              imageHeight={256}
+              width="128px"
+              height="128px"
+            />
+            <vstack alignment="start middle" gap="small">
+              <text size="large" weight="bold">{ghost.name}</text>
+              {ghost.clues.map((clue, i) => (
+                <text size="medium" key={i.toString()}>{clue}</text>
+              ))}
+            </vstack>
+          </hstack>
+          <spacer size="medium" />
+          <hstack gap="small" alignment="center middle">
+            <button appearance="secondary" onPress={() => setGhostIndex((idx) => (idx === 0 ? ghosts.length - 1 : idx - 1))}>
+              Previous
+            </button>
+            <button appearance="secondary" onPress={() => setGhostIndex((idx) => (idx === ghosts.length - 1 ? 0 : idx + 1))}>
+              Next
+            </button>
+          </hstack>
         </vstack>
       );
     } else if (screen === 'basement') {
