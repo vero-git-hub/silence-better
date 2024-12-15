@@ -133,6 +133,29 @@ Devvit.addCustomPostType({
       setUsedAtticHint(false);
     }
 
+    async function shareResults(context: any, message: string) {
+      const { reddit, ui, postId } = context;
+    
+      if (!postId) {
+        console.error("No post ID found. Cannot share results.");
+        ui.showToast("Error: Unable to share results. Please try again.");
+        return;
+      }
+    
+      try {
+        await reddit.submitComment({
+          id: postId,
+          text: JSON.stringify([
+            { e: "text", t: message }
+          ]),
+        });
+        ui.showToast("Your results have been shared!");
+      } catch (error) {
+        console.error("Error while sharing results:", error);
+        ui.showToast("Failed to share results. Please try again.");
+      }
+    }    
+
     if (screen === 'start') {
       return (
         <vstack height="100%" width="100%" gap="medium" alignment="center middle">
@@ -310,6 +333,19 @@ Devvit.addCustomPostType({
                 onPress={() => setScreen('start')}
               >
                 Play Again
+              </button>
+              <button
+                appearance="secondary"
+                onPress={() => {
+                  shareResults(
+                    _context,
+                    `I guessed the ghost! It was ${ghosts[chosenGhostIndex!].name} with a noise level of ${noiseLevel}.`
+                  ).catch((error) => {
+                    console.error("Error during shareResults:", error);
+                  });
+                }}
+              >
+                Share Results
               </button>
             </vstack>
           </zstack>
