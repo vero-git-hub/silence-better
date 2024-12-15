@@ -39,7 +39,7 @@ const ghosts: GhostInfo[] = [
     image: "whisperer.png",
     clues: [
       "Whispers phrases",
-      "Can pretend to be the Sandman",
+      "Leaves sand",
       "Repeats whisper again"
     ],
   },
@@ -48,7 +48,7 @@ const ghosts: GhostInfo[] = [
     image: "sage.png",
     clues: [
       "Does not reflect in mirrors",
-      "Can pretend to be another ghost",
+      "Whispers phrases",
       "A grey hair"
     ],
   },
@@ -75,10 +75,7 @@ Devvit.addCustomPostType({
     const [usedAtticHint, setUsedAtticHint] = useState(false);
 
     const [chosenGhostIndex, setChosenGhostIndex] = useState<number | null>(null);
-
-    const [basementClueMessage, setBasementClueMessage] = useState<string | null>(null);
-    const [livingRoomClueMessage, setLivingRoomClueMessage] = useState<string | null>(null);
-    const [atticClueMessage, setAtticClueMessage] = useState<string | null>(null);
+    const [randomizedClues, setRandomizedClues] = useState<string[]>([]);
 
     const [ghostIndex, setGhostIndex] = useState(0);
 
@@ -113,6 +110,29 @@ Devvit.addCustomPostType({
       });
     }
 
+    const shuffleArray = (array: string[]): string[] => {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    };
+
+    function startGame() {
+      const randomIndex = Math.floor(Math.random() * ghosts.length);
+      setChosenGhostIndex(randomIndex);
+      console.log("Chosen ghost:", ghosts[randomIndex].name);
+
+      const clues = shuffleArray([...ghosts[randomIndex].clues]);
+      setRandomizedClues(clues);
+
+      setScreen('basement');
+      setNoiseLevel(0);
+      setUsedBasementHint(false);
+      setUsedLivingRoomHint(false);
+      setUsedAtticHint(false);
+    }
+
     if (screen === 'start') {
       return (
         <vstack height="100%" width="100%" gap="medium" alignment="center middle">
@@ -125,20 +145,7 @@ Devvit.addCustomPostType({
             width="248px"
           />
           <text size="large">Welcome to Silence Better Game!</text>
-          <button appearance="primary" onPress={() => {
-            const randomIndex = Math.floor(Math.random() * ghosts.length);
-            setChosenGhostIndex(randomIndex);
-            console.log("Chosen ghost:", ghosts[randomIndex].name);
-            
-            setScreen('basement');
-            setNoiseLevel(0);
-            setUsedBasementHint(false);
-            setUsedLivingRoomHint(false);
-            setUsedAtticHint(false);
-            setBasementClueMessage(null);
-            setLivingRoomClueMessage(null);
-            setAtticClueMessage(null);
-          }}>
+          <button appearance="primary" onPress={startGame}>
             Start Game
           </button>
           <button appearance="secondary" onPress={() => setScreen('ghost_list')}>
@@ -212,7 +219,6 @@ Devvit.addCustomPostType({
                 if (!usedBasementHint && chosenGhostIndex !== null) {
                   increaseNoise(3);
                   setUsedBasementHint(true);
-                  setBasementClueMessage(ghosts[chosenGhostIndex].clues[0]);
                 } else {
                   console.log("You already looked around here.");
                 }
@@ -226,10 +232,8 @@ Devvit.addCustomPostType({
                 Go to the attic
               </button>
             </hstack>
-            {basementClueMessage && (
-              <vstack padding="small">
-                <text size="medium" color="yellow">Hint found: {basementClueMessage}</text>
-              </vstack>
+            {usedBasementHint && (
+              <text size="medium" color="yellow">{randomizedClues[0]}</text>
             )}
           </vstack>
         </zstack>
@@ -259,7 +263,6 @@ Devvit.addCustomPostType({
                 if (!usedLivingRoomHint && chosenGhostIndex !== null) {
                   increaseNoise(2);
                   setUsedLivingRoomHint(true);
-                  setLivingRoomClueMessage(ghosts[chosenGhostIndex].clues[1]);
                 } else {
                   console.log("You already sat on the sofa here.");
                 }
@@ -273,10 +276,8 @@ Devvit.addCustomPostType({
                 Go to the attic
               </button>
             </hstack>
-            {livingRoomClueMessage && (
-              <vstack padding="small">
-                <text size="medium" color="yellow">Hint found: {livingRoomClueMessage}</text>
-              </vstack>
+            {usedLivingRoomHint && (
+              <text size="medium" color="yellow">{randomizedClues[1]}</text>
             )}
           </vstack>
         </zstack>
@@ -307,7 +308,6 @@ Devvit.addCustomPostType({
                 if (!usedAtticHint && chosenGhostIndex !== null) {
                   increaseNoise(1);
                   setUsedAtticHint(true);
-                  setAtticClueMessage(ghosts[chosenGhostIndex].clues[2]);
                 } else {
                   console.log("You already opened a box here.");
                 }
@@ -321,10 +321,8 @@ Devvit.addCustomPostType({
                 Go to living room
               </button>
             </hstack>
-            {atticClueMessage && (
-              <vstack padding="small">
-                <text size="medium" color="yellow">Hint found: {atticClueMessage}</text>
-              </vstack>
+            {usedAtticHint && (
+              <text size="medium" color="yellow">{randomizedClues[2]}</text>
             )}
           </vstack>
         </zstack>
@@ -335,13 +333,7 @@ Devvit.addCustomPostType({
           <text size="large" weight="bold" color="red">
             You made too much noise... Game Over.
           </text>
-          <button appearance="primary" onPress={() => {
-            setScreen('start');
-            setNoiseLevel(0);
-            setUsedBasementHint(false);
-            setUsedLivingRoomHint(false);
-            setUsedAtticHint(false);
-          }}>
+          <button appearance="primary" onPress={() => setScreen('start')}>
             Restart
           </button>
         </blocks>
