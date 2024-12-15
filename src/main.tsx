@@ -1,6 +1,7 @@
 import { Devvit, useState } from '@devvit/public-api';
 import { ghosts } from './data.js';
 import { shuffleArray } from './utils.js';
+import { NoiseIndicator } from './components/NoiseIndicator.js';
 
 Devvit.configure({
   redditAPI: true,
@@ -44,12 +45,6 @@ Devvit.addCustomPostType({
     const [randomizedClues, setRandomizedClues] = useState<string[]>([]);
 
     const [ghostIndex, setGhostIndex] = useState(0);
-
-    const NoiseIndicator = () => (
-      <hstack width="100%" alignment="start middle" padding="small">
-        <text size="medium" color="white">{`Noise level: ${noiseLevel}%`}</text>
-      </hstack>
-    );
 
     function increaseNoise(amount: number) {
       setNoiseLevel((lvl) => {
@@ -187,7 +182,7 @@ Devvit.addCustomPostType({
             resizeMode="cover"
           />
           <vstack gap="medium" alignment="middle center">
-            {NoiseIndicator()}
+          <NoiseIndicator noiseLevel={noiseLevel} />
             <text size="large" weight="bold" color="white">
               You are in the basement!.
             </text>
@@ -346,7 +341,7 @@ Devvit.addCustomPostType({
             resizeMode="cover"
           />
           <vstack gap="medium" alignment="middle center">
-            {NoiseIndicator()}
+          <NoiseIndicator noiseLevel={noiseLevel} />
             <text size="large" weight="bold" color="white">
               You are in the living room.
             </text>
@@ -390,7 +385,7 @@ Devvit.addCustomPostType({
             resizeMode="cover"
           />
           <vstack gap="medium" alignment="middle center">
-            {NoiseIndicator()}
+          <NoiseIndicator noiseLevel={noiseLevel} />
             <text size="large" weight="bold" color="white">
               You are in the attic.
             </text>
