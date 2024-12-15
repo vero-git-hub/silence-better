@@ -1,4 +1,6 @@
 import { Devvit, useState } from '@devvit/public-api';
+import { ghosts } from './data.js';
+import { shuffleArray } from './utils.js';
 
 Devvit.configure({
   redditAPI: true,
@@ -26,42 +28,6 @@ Devvit.addMenuItem({
     ui.navigateTo(post);
   },
 });
-
-type GhostInfo = {
-  name: string;
-  image: string;
-  clues: string[];
-};
-
-const ghosts: GhostInfo[] = [
-  {
-    name: "Whisperer",
-    image: "whisperer.png",
-    clues: [
-      "Whispers phrases",
-      "Leaves sand",
-      "Repeats whisper again"
-    ],
-  },
-  {
-    name: "Sage",
-    image: "sage.png",
-    clues: [
-      "Does not reflect in mirrors",
-      "Whispers phrases",
-      "A grey hair"
-    ],
-  },
-  {
-    name: "Sandman",
-    image: "sandman.png",
-    clues: [
-      "Does not reflect in mirrors",
-      "Leaves sand",
-      "Plays with time"
-    ],
-  },
-];
 
 Devvit.addCustomPostType({
   name: 'Experience Post',
@@ -109,14 +75,6 @@ Devvit.addCustomPostType({
         return newRoom;
       });
     }
-
-    const shuffleArray = (array: string[]): string[] => {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
-    };
 
     function startGame() {
       const randomIndex = Math.floor(Math.random() * ghosts.length);
@@ -350,31 +308,31 @@ Devvit.addCustomPostType({
             </vstack>
           </zstack>
         );
-      } else if (screen === 'ghost_victory') {
-        return (
-          <zstack height="100%" width="100%" alignment="center middle">
-            <image
-              url="ghost_victory.png"
-              description="ghost victory background"
-              imageWidth={800}
-              imageHeight={600}
-              width="100%"
-              height="100%"
-              resizeMode="cover"
-            />
-            <vstack gap="medium" alignment="middle center">
-              <text size="large" weight="bold" color="red">
-                The ghost has won! He managed to confuse you.
-              </text>
-              <button
-                appearance="primary"
-                onPress={() => setScreen('start')}
-              >
-                Play Again
-              </button>
-            </vstack>
-          </zstack>
-        );
+    } else if (screen === 'ghost_victory') {
+      return (
+        <zstack height="100%" width="100%" alignment="center middle">
+          <image
+            url="ghost_victory.png"
+            description="ghost victory background"
+            imageWidth={800}
+            imageHeight={600}
+            width="100%"
+            height="100%"
+            resizeMode="cover"
+          />
+          <vstack gap="medium" alignment="middle center">
+            <text size="large" weight="bold" color="red">
+              The ghost has won! He managed to confuse you.
+            </text>
+            <button
+              appearance="primary"
+              onPress={() => setScreen('start')}
+            >
+              Play Again
+            </button>
+          </vstack>
+        </zstack>
+      );
     } else if (screen === 'living_room') {
       return (
         <zstack height="100%" width="100%" alignment="center middle">
