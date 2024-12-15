@@ -31,7 +31,24 @@ Devvit.addCustomPostType({
   name: 'Experience Post',
   height: 'regular',
   render: (_context) => {
-    const [screen, setScreen] = useState<'start' | 'basement' | 'living_room' | 'attic'>('start');
+    const [screen, setScreen] = useState<'start' | 'basement' | 'living_room' | 'attic'| 'defeat'>('start');
+    const [noiseLevel, setNoiseLevel] = useState(0);
+
+    const NoiseIndicator = () => (
+      <hstack width="100%" alignment="start middle" padding="small">
+        <text size="medium" color="white">{`Noise level: ${noiseLevel}%`}</text>
+      </hstack>
+    );
+
+    function increaseNoise(amount: number) {
+      setNoiseLevel((lvl) => {
+        const newLvl = lvl + amount;
+        if (newLvl > 5 && screen !== 'defeat') {
+          setScreen('defeat');
+        }
+        return newLvl;
+      });
+    }
 
     if (screen === 'start') {
       return (
@@ -45,7 +62,10 @@ Devvit.addCustomPostType({
             width="248px"
           />
           <text size="large">Welcome to Silent Better Game!</text>
-          <button appearance="primary" onPress={() => setScreen('basement')}>
+          <button appearance="primary" onPress={() => {
+            setScreen('basement');
+            setNoiseLevel(0);
+          }}>
             Start Game
           </button>
         </vstack>
@@ -63,14 +83,18 @@ Devvit.addCustomPostType({
             resizeMode="cover"
           />
           <vstack gap="medium" alignment="middle center">
+            {NoiseIndicator()}
             <text size="large" weight="bold" color="white">
-              You are in the basement.
+              You are in the basement!.
             </text>
             <text size="medium" color="white">
               It's dark and damp. What will you do?
             </text>
             <hstack gap="small">
-              <button appearance="secondary" onPress={() => console.log("Look around pressed")}>
+              <button appearance="secondary" onPress={() => {
+                console.log("Look around pressed");
+                increaseNoise(3);
+              }}>
                 Look around
               </button>
               <button appearance="secondary" onPress={() => setScreen('living_room')}>
@@ -93,6 +117,7 @@ Devvit.addCustomPostType({
             resizeMode="cover"
           />
           <vstack gap="medium" alignment="middle center">
+            {NoiseIndicator()}
             <text size="large" weight="bold" color="white">
               You are in the living room.
             </text>
@@ -100,7 +125,10 @@ Devvit.addCustomPostType({
               You see a cozy sofa and a flickering TV. What will you do?
             </text>
             <hstack gap="small">
-              <button appearance="secondary" onPress={() => console.log("Sit on sofa pressed")}>
+              <button appearance="secondary" onPress={() => {
+                console.log("Sit on sofa pressed")
+                increaseNoise(2);
+              }}>
                 Sit on the sofa
               </button>
               <button appearance="secondary" onPress={() => setScreen('basement')}>
@@ -126,6 +154,7 @@ Devvit.addCustomPostType({
             resizeMode="cover"
           />
           <vstack gap="medium" alignment="middle center">
+            {NoiseIndicator()}
             <text size="large" weight="bold" color="white">
               You are in the attic.
             </text>
@@ -133,7 +162,10 @@ Devvit.addCustomPostType({
               Dusty boxes and old memories surround you. What now?
             </text>
             <hstack gap="small">
-              <button appearance="secondary" onPress={() => console.log("Open a box pressed")}>
+              <button appearance="secondary" onPress={() => {
+                console.log("Open a box pressed");
+                increaseNoise(1);
+              }}>
                 Open a box
               </button>
               <button appearance="secondary" onPress={() => setScreen('basement')}>
@@ -145,6 +177,20 @@ Devvit.addCustomPostType({
             </hstack>
           </vstack>
         </zstack>
+      );
+    } else if (screen === 'defeat') {
+      return (
+        <blocks>
+          <text size="large" weight="bold" color="red">
+            You made too much noise... Game Over.
+          </text>
+          <button appearance="primary" onPress={() => {
+            setScreen('start');
+            setNoiseLevel(0);
+          }}>
+            Restart
+          </button>
+        </blocks>
       );
     }
     return (
