@@ -67,7 +67,7 @@ Devvit.addCustomPostType({
   name: 'Experience Post',
   height: 'regular',
   render: (_context) => {
-    const [screen, setScreen] = useState<'start' | 'basement' | 'living_room' | 'attic'| 'defeat'| 'ghost_list' | 'guess' | 'victory'>('start');
+    const [screen, setScreen] = useState<'start' | 'basement' | 'living_room' | 'attic'| 'defeat'| 'ghost_list' | 'guess' | 'victory' | 'ghost_victory'>('start');
     const [noiseLevel, setNoiseLevel] = useState(0);
 
     const [usedBasementHint, setUsedBasementHint] = useState(false);
@@ -270,7 +270,7 @@ Devvit.addCustomPostType({
                     if (chosenGhostIndex === index) {
                       setScreen('victory');
                     } else {
-                      console.log("You guessed the wrong ghost.");
+                      setScreen('ghost_victory');
                     }
                   }}
                 >
@@ -304,6 +304,31 @@ Devvit.addCustomPostType({
               </text>
               <text size="medium" color="white">
                 The ghost was {ghosts[chosenGhostIndex!].name}.
+              </text>
+              <button
+                appearance="primary"
+                onPress={() => setScreen('start')}
+              >
+                Play Again
+              </button>
+            </vstack>
+          </zstack>
+        );
+      } else if (screen === 'ghost_victory') {
+        return (
+          <zstack height="100%" width="100%" alignment="center middle">
+            <image
+              url="ghost_victory.png"
+              description="ghost victory background"
+              imageWidth={800}
+              imageHeight={600}
+              width="100%"
+              height="100%"
+              resizeMode="cover"
+            />
+            <vstack gap="medium" alignment="middle center">
+              <text size="large" weight="bold" color="red">
+                The ghost has won! He managed to confuse you.
               </text>
               <button
                 appearance="primary"
