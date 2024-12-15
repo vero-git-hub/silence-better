@@ -74,6 +74,8 @@ Devvit.addCustomPostType({
     const [usedLivingRoomHint, setUsedLivingRoomHint] = useState(false);
     const [usedAtticHint, setUsedAtticHint] = useState(false);
 
+    const [chosenGhostIndex, setChosenGhostIndex] = useState<number | null>(null);
+
     const [ghostIndex, setGhostIndex] = useState(0);
 
     const NoiseIndicator = () => (
@@ -118,8 +120,12 @@ Devvit.addCustomPostType({
             height="157px"
             width="248px"
           />
-          <text size="large">Welcome to Silent Better Game!</text>
+          <text size="large">Welcome to Silence Better Game!</text>
           <button appearance="primary" onPress={() => {
+            const randomIndex = Math.floor(Math.random() * ghosts.length);
+            setChosenGhostIndex(randomIndex);
+            console.log("Chosen ghost:", ghosts[randomIndex].name);
+            
             setScreen('basement');
             setNoiseLevel(0);
             setUsedBasementHint(false);
