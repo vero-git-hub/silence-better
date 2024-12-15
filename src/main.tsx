@@ -3,6 +3,7 @@ import { ghosts } from './data.js';
 import { shuffleArray } from './utils.js';
 import { NoiseIndicator } from './components/NoiseIndicator.js';
 import { StartScreen } from './components/StartScreen.js';
+import { GhostListScreen } from './components/GhostListScreen.js';
 
 Devvit.configure({
   redditAPI: true,
@@ -118,44 +119,18 @@ Devvit.addCustomPostType({
         />
       );
     } else if (screen === 'ghost_list') {
-      const ghost = ghosts[ghostIndex];
-
       return (
-        <vstack height="100%" width="100%" gap="medium" alignment="top center" padding="medium">
-          <hstack gap="small" alignment="center middle">
-            <button appearance="secondary" onPress={() => setScreen('start')}>
-              Back
-            </button>
-            <text size="xlarge" weight="bold">Ghosts Information</text>
-          </hstack>
-          
-          <spacer size="medium" />
-          <hstack gap="medium" alignment="top center" width="100%" grow>
-            <image
-              url={ghost.image}
-              description={ghost.name}
-              imageWidth={256}
-              imageHeight={256}
-              width="128px"
-              height="128px"
-            />
-            <vstack alignment="start middle" gap="small">
-              <text size="large" weight="bold">{ghost.name}</text>
-              {ghost.clues.map((clue, i) => (
-                <text size="medium" key={i.toString()}>{clue}</text>
-              ))}
-            </vstack>
-          </hstack>
-          <spacer size="medium" />
-          <hstack gap="small" alignment="center middle">
-            <button appearance="secondary" onPress={() => setGhostIndex((idx) => (idx === 0 ? ghosts.length - 1 : idx - 1))}>
-              Previous
-            </button>
-            <button appearance="secondary" onPress={() => setGhostIndex((idx) => (idx === ghosts.length - 1 ? 0 : idx + 1))}>
-              Next
-            </button>
-          </hstack>
-        </vstack>
+        <GhostListScreen
+          ghostIndex={ghostIndex}
+          ghosts={ghosts}
+          onBack={() => setScreen('start')}
+          onPrevious={() =>
+            setGhostIndex((idx) => (idx === 0 ? ghosts.length - 1 : idx - 1))
+          }
+          onNext={() => 
+            setGhostIndex((idx) => (idx === ghosts.length - 1 ? 0 : idx + 1))
+          }
+          />
       );
     } else if (screen === 'basement') {
       return (
