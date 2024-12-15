@@ -1,5 +1,5 @@
 import { Devvit } from "@devvit/public-api";
-import { GhostInfo } from "../types.js";
+import { GhostInfo } from "../../types.js";
 
 export const GhostListScreen = ({
     ghostIndex,

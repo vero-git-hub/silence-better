@@ -1,15 +1,14 @@
 import { Devvit, useState } from '@devvit/public-api';
 import { ghosts } from './data.js';
 import { shuffleArray } from './utils.js';
-import { NoiseIndicator } from './components/NoiseIndicator.js';
-import { StartScreen } from './components/StartScreen.js';
-import { GhostListScreen } from './components/GhostListScreen.js';
-import { BasementScreen } from './components/BasementScreen.js';
-import { GuessScreen } from './components/GuessScreen.js';
-import { VictoryScreen } from './components/VictoryScreen.js';
-import { GhostVictoryScreen } from './components/GhostVictoryScreen.js';
-import { LivingRoomScreen } from './components/LivingRoomScreen.js';
-import { AtticScreen } from './components/AtticScreen.js';
+import { StartScreen } from './components/screens/StartScreen.js';
+import { GhostListScreen } from './components/screens/GhostListScreen.js';
+import { GuessScreen } from './components/screens/GuessScreen.js';
+import { VictoryScreen } from './components/screens/VictoryScreen.js';
+import { GhostVictoryScreen } from './components/screens/GhostVictoryScreen.js';
+import { BasementScreen } from './components/rooms/BasementRoom.js';
+import { LivingRoomScreen } from './components/rooms/LivingRoom.js';
+import { AtticScreen } from './components/rooms/AtticRoom.js';
 
 Devvit.configure({
   redditAPI: true,
@@ -211,8 +210,8 @@ Devvit.addCustomPostType({
       return (
         <AtticScreen
           noiseLevel={noiseLevel}
-          usedAtticHint={usedAtticHint}
-          randomizedClue={randomizedClues[2]}
+          usedHint={usedAtticHint}
+          clue={randomizedClues[2]}
           onHintActivate={() => {
             console.log("Open a box pressed");
             if (!usedAtticHint && chosenGhostIndex !== null) {
