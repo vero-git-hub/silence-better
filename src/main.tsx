@@ -4,6 +4,12 @@ import { shuffleArray } from './utils.js';
 import { NoiseIndicator } from './components/NoiseIndicator.js';
 import { StartScreen } from './components/StartScreen.js';
 import { GhostListScreen } from './components/GhostListScreen.js';
+import { BasementScreen } from './components/BasementScreen.js';
+import { GuessScreen } from './components/GuessScreen.js';
+import { VictoryScreen } from './components/VictoryScreen.js';
+import { GhostVictoryScreen } from './components/GhostVictoryScreen.js';
+import { LivingRoomScreen } from './components/LivingRoomScreen.js';
+import { AtticScreen } from './components/AtticScreen.js';
 
 Devvit.configure({
   redditAPI: true,
@@ -100,16 +106,29 @@ Devvit.addCustomPostType({
       try {
         await reddit.submitComment({
           id: postId,
-          text: JSON.stringify([
-            { e: "text", t: message }
-          ]),
+          text: message,
         });
         ui.showToast("Your results have been shared!");
       } catch (error) {
         console.error("Error while sharing results:", error);
         ui.showToast("Failed to share results. Please try again.");
       }
-    }    
+    }
+
+    async function handleShareResults() {
+      if (chosenGhostIndex !== null) {
+        const message = `I guessed the ghost! It was ${ghosts[chosenGhostIndex].name} with a noise level of ${noiseLevel}.`;
+        await shareResults(_context, message);
+      }
+    }
+
+    function handleSelectGhost(index: number) {
+      if (chosenGhostIndex === index) {
+        setScreen('victory');
+      } else {
+        setScreen('ghost_victory');
+      }
+    }
 
     if (screen === 'start') {
       return (
@@ -134,251 +153,78 @@ Devvit.addCustomPostType({
       );
     } else if (screen === 'basement') {
       return (
-        <zstack height="100%" width="100%" alignment="center middle">
-          <image
-            url="basement.png"
-            description="basement background"
-            imageWidth={800}
-            imageHeight={600}
-            width="100%"
-            height="100%"
-            resizeMode="cover"
-          />
-          <vstack gap="medium" alignment="middle center">
-          <NoiseIndicator noiseLevel={noiseLevel} />
-            <text size="large" weight="bold" color="white">
-              You are in the basement!.
-            </text>
-            <text size="medium" color="white">
-              It's dark and damp. What will you do?
-            </text>
-            <hstack gap="small">
-              <button appearance="secondary" onPress={() => {
-                console.log("Look around pressed");
-                if (!usedBasementHint && chosenGhostIndex !== null) {
-                  increaseNoise(3);
-                  setUsedBasementHint(true);
-                } else {
-                  console.log("You already looked around here.");
-                }
-              }}>
-                Look around
-              </button>
-              <button appearance="secondary" onPress={() => goToRoom('living_room')}>
-                Go to the living room
-              </button>
-              <button appearance="secondary" onPress={() => goToRoom('attic')}>
-                Go to the attic
-              </button>
-            </hstack>
-            <hstack gap="small">
-              <button
-                appearance="primary"
-                onPress={() => setScreen('guess')}
-              >
-                Guess the ghost
-              </button>
-            </hstack>
-            {usedBasementHint && (
-              <text size="medium" color="yellow">{randomizedClues[0]}</text>
-            )}
-          </vstack>
-        </zstack>
+        <BasementScreen
+          noiseLevel={noiseLevel}
+          usedHint={usedBasementHint}
+          clue={randomizedClues[0] || ""}
+          onLookAround={() => {
+            if (!usedBasementHint && chosenGhostIndex !== null) {
+              increaseNoise(3);
+              setUsedBasementHint(true);
+            }
+          }}
+          onGoToLivingRoom={() => goToRoom('living_room')}
+          onGoToAttic={() => goToRoom('attic')}
+          onGuess={() => setScreen('guess')}
+        />
       );
     } else if (screen === 'guess') {
         return (
-          <zstack height="100%" width="100%" alignment="center middle">
-            <image
-              url="guess_background.png"
-              description="guessing background"
-              imageWidth={800}
-              imageHeight={600}
-              width="100%"
-              height="100%"
-              resizeMode="cover"
-            />
-            <vstack gap="medium" alignment="middle center">
-              <text size="large" weight="bold" color="white">
-                Who is haunting this house?
-              </text>
-              {ghosts.map((ghost, index) => (
-                <button
-                  key={index.toString()}
-                  appearance="secondary"
-                  onPress={() => {
-                    if (chosenGhostIndex === index) {
-                      setScreen('victory');
-                    } else {
-                      setScreen('ghost_victory');
-                    }
-                  }}
-                >
-                  {ghost.name}
-                </button>
-              ))}
-              <button
-                appearance="secondary"
-                onPress={() => setScreen('basement')}
-              >
-                Back to the basement
-              </button>
-            </vstack>
-          </zstack>
+          <GuessScreen
+            ghosts={ghosts}
+            onSelectGhost={handleSelectGhost}
+            onBack={() => setScreen('basement')}
+          />
         );
     } else if (screen === 'victory') {
         return (
-          <zstack height="100%" width="100%" alignment="center middle">
-            <image
-              url="victory.png"
-              description="victory background"
-              imageWidth={800}
-              imageHeight={600}
-              width="100%"
-              height="100%"
-              resizeMode="cover"
-            />
-            <vstack gap="medium" alignment="middle center">
-              <text size="large" weight="bold" color="gold">
-                Congratulations! You have identified the ghost!
-              </text>
-              <text size="medium" color="white">
-                The ghost was {ghosts[chosenGhostIndex!].name}.
-              </text>
-              <button
-                appearance="primary"
-                onPress={() => setScreen('start')}
-              >
-                Play Again
-              </button>
-              <button
-                appearance="secondary"
-                onPress={() => {
-                  shareResults(
-                    _context,
-                    `I guessed the ghost! It was ${ghosts[chosenGhostIndex!].name} with a noise level of ${noiseLevel}.`
-                  ).catch((error) => {
-                    console.error("Error during shareResults:", error);
-                  });
-                }}
-              >
-                Share Results
-              </button>
-            </vstack>
-          </zstack>
+          <VictoryScreen
+            ghostName={ghosts[chosenGhostIndex!].name}
+            onPlayAgain={() => setScreen("start")}
+            onShareResults={handleShareResults}
+          />
         );
     } else if (screen === 'ghost_victory') {
-      return (
-        <zstack height="100%" width="100%" alignment="center middle">
-          <image
-            url="ghost_victory.png"
-            description="ghost victory background"
-            imageWidth={800}
-            imageHeight={600}
-            width="100%"
-            height="100%"
-            resizeMode="cover"
+        return (
+          <GhostVictoryScreen onPlayAgain={() => setScreen("start")}
           />
-          <vstack gap="medium" alignment="middle center">
-            <text size="large" weight="bold" color="red">
-              The ghost has won! He managed to confuse you.
-            </text>
-            <button
-              appearance="primary"
-              onPress={() => setScreen('start')}
-            >
-              Play Again
-            </button>
-          </vstack>
-        </zstack>
-      );
+        );
     } else if (screen === 'living_room') {
       return (
-        <zstack height="100%" width="100%" alignment="center middle">
-          <image
-            url="living_room.png"
-            description="living room background"
-            imageWidth={800}
-            imageHeight={600}
-            width="100%"
-            height="100%"
-            resizeMode="cover"
-          />
-          <vstack gap="medium" alignment="middle center">
-          <NoiseIndicator noiseLevel={noiseLevel} />
-            <text size="large" weight="bold" color="white">
-              You are in the living room.
-            </text>
-            <text size="medium" color="white">
-              You see a cozy sofa and a flickering TV. What will you do?
-            </text>
-            <hstack gap="small">
-              <button appearance="secondary" onPress={() => {
-                if (!usedLivingRoomHint && chosenGhostIndex !== null) {
-                  increaseNoise(2);
-                  setUsedLivingRoomHint(true);
-                } else {
-                  console.log("You already sat on the sofa here.");
-                }
-              }}>
-                Sit on the sofa
-              </button>
-              <button appearance="secondary" onPress={() => goToRoom('basement')}>
-                Back to the basement
-              </button>
-              <button appearance="secondary" onPress={() => goToRoom('attic')}>
-                Go to the attic
-              </button>
-            </hstack>
-            {usedLivingRoomHint && (
-              <text size="medium" color="yellow">{randomizedClues[1]}</text>
-            )}
-          </vstack>
-        </zstack>
+        <LivingRoomScreen
+          noiseLevel={noiseLevel}
+          usedLivingRoomHint={usedLivingRoomHint}
+          randomizedClue={randomizedClues[1]}
+          onHintActivate={() => {
+            if (!usedLivingRoomHint && chosenGhostIndex !== null) {
+              increaseNoise(2);
+              setUsedLivingRoomHint(true);
+            } else {
+              console.log("You already sat on the sofa here.");
+            }
+          }}
+          goToBasement={() => goToRoom("basement")}
+          goToAttic={() => goToRoom("attic")}
+        />
       );
     } else if (screen === 'attic') {
       return (
-        <zstack height="100%" width="100%" alignment="center middle">
-          <image
-            url="attic.png"
-            description="attic background"
-            imageWidth={800}
-            imageHeight={600}
-            width="100%"
-            height="100%"
-            resizeMode="cover"
-          />
-          <vstack gap="medium" alignment="middle center">
-          <NoiseIndicator noiseLevel={noiseLevel} />
-            <text size="large" weight="bold" color="white">
-              You are in the attic.
-            </text>
-            <text size="medium" color="white">
-              Dusty boxes and old memories surround you. What now?
-            </text>
-            <hstack gap="small">
-              <button appearance="secondary" onPress={() => {
-                console.log("Open a box pressed");
-                if (!usedAtticHint && chosenGhostIndex !== null) {
-                  increaseNoise(1);
-                  setUsedAtticHint(true);
-                } else {
-                  console.log("You already opened a box here.");
-                }
-              }}>
-                Open a box
-              </button>
-              <button appearance="secondary" onPress={() => goToRoom('basement')}>
-                Go back to basement
-              </button>
-              <button appearance="secondary" onPress={() => goToRoom('living_room')}>
-                Go to living room
-              </button>
-            </hstack>
-            {usedAtticHint && (
-              <text size="medium" color="yellow">{randomizedClues[2]}</text>
-            )}
-          </vstack>
-        </zstack>
+        <AtticScreen
+          noiseLevel={noiseLevel}
+          usedAtticHint={usedAtticHint}
+          randomizedClue={randomizedClues[2]}
+          onHintActivate={() => {
+            console.log("Open a box pressed");
+            if (!usedAtticHint && chosenGhostIndex !== null) {
+              increaseNoise(1);
+              setUsedAtticHint(true);
+            } else {
+              console.log("You already opened a box here.");
+            }
+          }}
+          goToBasement={() => goToRoom("basement")}
+          goToLivingRoom={() => goToRoom("living_room")}
+        />
       );
     } else if (screen === 'defeat') {
       return (
