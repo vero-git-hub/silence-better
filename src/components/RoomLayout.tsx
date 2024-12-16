@@ -1,8 +1,8 @@
 import { Devvit } from "@devvit/public-api";
-import { NoiseIndicator } from "./NoiseIndicator.js";
 import { BackgroundImage } from "./ui/Image.js";
 import { PrimaryButton, RenderActionButton } from "./ui/Button.js";
 import { TextBlock } from "./ui/TextBlock.js";
+import { NoiseBar } from "./NoiseBar.js";
 
 export const RoomLayout = ({
     backgroundImage,
@@ -30,7 +30,7 @@ export const RoomLayout = ({
         <zstack height="100%" width="100%" alignment="center middle">
           <BackgroundImage url={backgroundImage} description={`${roomTitle} background`} />
           <vstack gap="medium" alignment="middle center">
-            <NoiseIndicator noiseLevel={noiseLevel} />
+            <NoiseBar noiseLevel={noiseLevel} />
             <TextBlock size="large" weight="bold" color="white" text={roomTitle} />
             <TextBlock size="medium" color="white" text={roomDescription} />
             <hstack gap="small">

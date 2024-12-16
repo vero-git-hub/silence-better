@@ -204,14 +204,12 @@ Devvit.addCustomPostType({
           ghostName={ghosts[chosenGhostIndex!].name}
           onPlayAgain={() => setScreen("start")}
           onShareResults={handleShareResults}
-          onExit={exitGame}
         />
       );
     } else if (screen === 'ghost_victory') {
       return (
         <GhostVictoryScreen
           onPlayAgain={() => setScreen("start")}
-          onExit={exitGame}
         />
       );
     } else if (screen === 'living_room') {
@@ -257,7 +255,6 @@ Devvit.addCustomPostType({
       return (
         <DefeatScreen 
           onPlayAgain={() => setScreen('start')} 
-          onExit={exitGame}
         />
       );
     }
