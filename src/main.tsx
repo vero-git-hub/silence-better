@@ -1,14 +1,14 @@
 import { Devvit, useState } from '@devvit/public-api';
 import { ghosts } from './data.js';
 import { shuffleArray } from './utils.js';
-import { StartScreen } from './components/screens/StartScreen.js';
-import { GhostListScreen } from './components/screens/GhostListScreen.js';
-import { GuessScreen } from './components/screens/GuessScreen.js';
-import { VictoryScreen } from './components/screens/VictoryScreen.js';
-import { GhostVictoryScreen } from './components/screens/GhostVictoryScreen.js';
-import { BasementScreen } from './components/rooms/BasementRoom.js';
-import { LivingRoomScreen } from './components/rooms/LivingRoom.js';
-import { AtticScreen } from './components/rooms/AtticRoom.js';
+import { StartScreen } from './components/screen/StartScreen.js';
+import { GhostListScreen } from './components/screen/GhostListScreen.js';
+import { GuessScreen } from './components/screen/GuessScreen.js';
+import { VictoryScreen } from './components/screen/VictoryScreen.js';
+import { GhostVictoryScreen } from './components/screen/GhostVictoryScreen.js';
+import { BasementScreen } from './components/room/BasementRoom.js';
+import { LivingRoomScreen } from './components/room/LivingRoom.js';
+import { AtticScreen } from './components/room/AtticRoom.js';
 
 Devvit.configure({
   redditAPI: true,
@@ -26,7 +26,6 @@ Devvit.addMenuItem({
     const post = await reddit.submitPost({
       title: 'My devvit post',
       subredditName: subreddit.name,
-      // The preview appears while the post loads
       preview: (
         <vstack height="100%" width="100%" alignment="middle center">
           <text size="large">Loading ...</text>

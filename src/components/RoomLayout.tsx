@@ -1,5 +1,8 @@
 import { Devvit } from "@devvit/public-api";
 import { NoiseIndicator } from "./NoiseIndicator.js";
+import { BackgroundImage } from "./ui/Image.js";
+import { PrimaryButton, RenderActionButton } from "./ui/Button.js";
+import { TextBlock } from "./ui/TextBlock.js";
 
 export const RoomLayout = ({
     backgroundImage,
@@ -25,47 +28,27 @@ export const RoomLayout = ({
   }) => {
     return (
         <zstack height="100%" width="100%" alignment="center middle">
-          <image
-            url={backgroundImage}
-            description={`${roomTitle} background`}
-            imageWidth={800}
-            imageHeight={600}
-            width="100%"
-            height="100%"
-            resizeMode="cover"
-          />
+          <BackgroundImage url={backgroundImage} description={`${roomTitle} background`} />
           <vstack gap="medium" alignment="middle center">
-        <NoiseIndicator noiseLevel={noiseLevel} />
-        <text size="large" weight="bold" color="white">
-          {roomTitle}
-        </text>
-        <text size="medium" color="white">
-          {roomDescription}
-        </text>
-        <hstack gap="small">
-          {secondaryActions.map((action, index) => (
-            <button
-              key={index.toString()}
-              appearance="secondary"
-              onPress={action.onPress}
-            >
-              {action.label}
-            </button>
-          ))}
-        </hstack>
-        {onPrimaryAction && primaryActionLabel ? (
-          <hstack gap="small">
-            <button appearance="primary" onPress={onPrimaryAction}>
-              {primaryActionLabel}
-            </button>
-          </hstack>
-        ) : null}
-        {hint != null && hint !== "" && (
-          <text size="medium" color="yellow">
-            {hint}
-          </text>
-        )}
-      </vstack>
+            <NoiseIndicator noiseLevel={noiseLevel} />
+            <TextBlock size="large" weight="bold" color="white" text={roomTitle} />
+            <TextBlock size="medium" color="white" text={roomDescription} />
+            <hstack gap="small">
+              {secondaryActions.map((action, index) => (
+                <RenderActionButton action={action} index={index} />
+              ))}
+            </hstack>
+            {onPrimaryAction && primaryActionLabel ? (
+              <hstack gap="small">
+                <PrimaryButton onPress={onPrimaryAction} label={primaryActionLabel} />
+              </hstack>
+            ) : null}
+            {hint != null && hint !== "" && (
+              <text size="medium" color="yellow">
+                {hint}
+              </text>
+            )}
+          </vstack>
         </zstack>
       );
   };
