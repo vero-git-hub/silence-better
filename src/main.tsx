@@ -10,6 +10,7 @@ import { BasementScreen } from './components/room/BasementRoom.js';
 import { LivingRoomScreen } from './components/room/LivingRoom.js';
 import { AtticScreen } from './components/room/AtticRoom.js';
 import { DefeatScreen } from './components/screen/DefeatScreen.js';
+import { RulesScreen } from './components/screen/RulesScreen.js';
 
 Devvit.configure({
   redditAPI: true,
@@ -41,7 +42,7 @@ Devvit.addCustomPostType({
   name: 'Experience Post',
   height: 'regular',
   render: (_context) => {
-    const [screen, setScreen] = useState<'start' | 'basement' | 'living_room' | 'attic'| 'defeat'| 'ghost_list' | 'guess' | 'victory' | 'ghost_victory'>('start');
+    const [screen, setScreen] = useState<'start' | 'basement' | 'living_room' | 'attic'| 'defeat'| 'ghost_list' | 'guess' | 'victory' | 'ghost_victory' | 'rules'>('start');
     const [noiseLevel, setNoiseLevel] = useState(0);
 
     const [usedBasementHint, setUsedBasementHint] = useState(false);
@@ -139,6 +140,7 @@ Devvit.addCustomPostType({
         <StartScreen
           onStartGame={startGame}
           onViewGhosts={() => setScreen('ghost_list')}
+          onViewRules={() => setScreen("rules")}
         />
       );
     } else if (screen === 'ghost_list') {
@@ -155,6 +157,12 @@ Devvit.addCustomPostType({
           }
           />
       );
+    } else if (screen === 'rules') {
+      return (
+        <RulesScreen onBack={() => setScreen('start')}
+        />
+      );
+
     } else if (screen === 'basement') {
       return (
         <BasementScreen
