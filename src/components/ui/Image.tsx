@@ -29,7 +29,7 @@ export const GhostImage = ({ url, description }: { url: string; description: str
     description={description}
     imageWidth={256}
     imageHeight={256}
-    width="128px"
-    height="128px"
+    width="160px"
+    height="170px"
   />
 );

@@ -32,8 +32,12 @@ export const RoomLayout = ({
           <BackgroundImage url={backgroundImage} description={`${roomTitle} background`} />
           <vstack gap="medium" alignment="middle center">
             <NoiseBar noiseLevel={noiseLevel} />
-            <TextBlock size="large" weight="bold" color="white" text={roomTitle} />
-            <TextBlock size="medium" color="white" text={roomDescription} />
+            <hstack backgroundColor="rgba(0, 0, 0, 0.5)" cornerRadius="medium" padding="small">
+              <TextBlock size="large" weight="bold" color="white" text={roomTitle} />
+            </hstack>
+            <hstack backgroundColor="rgba(0, 0, 0, 0.5)" cornerRadius="medium" padding="small">
+              <TextBlock size="medium" color="white" text={roomDescription} />
+            </hstack>
             <hstack gap="small">
               {secondaryActions.map((action, index) => (
                 <RenderActionButton action={action} index={index} />

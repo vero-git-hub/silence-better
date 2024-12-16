@@ -13,7 +13,7 @@ export const StartScreen = ({
   onViewRules: () => void;
 }) => (
   <vstack height="100%" width="100%" gap="medium" alignment="center middle">
-    <LogoImage url="silent-better.png" description="logo" />
+    <LogoImage url="silent_better.png" description="logo" />
     <TextBlock size="large" weight="bold" text="Welcome to Silence Better Game!" />
     <PrimaryButton onPress={onStartGame} label="Start Game" />
     <hstack>

@@ -19,16 +19,17 @@ export const GhostListScreen = ({
     onNext: () => void;
   }) => {
     const ghost = ghosts[ghostIndex];
-    <BackgroundImage url="ghost_list.png" description="ghost list background" />
     return (
-      <vstack height="100%" width="100%" gap="medium" alignment="top center" padding="medium">
-      <hstack gap="small" alignment="center middle">
-        <BackButton onPress={onBack} label="Back"/>
-        <TextBlock size="xlarge" weight="bold" text={`Ghost ${ghostIndex + 1} of ${ghosts.length}`} />
-      </hstack>
-      <spacer size="medium" />
-      <GhostInfoBlock ghost={ghost} />
-      <NavigationButtons onPrevious={onPrevious} onNext={onNext} />
-    </vstack>
+      <zstack height="100%" width="100%" alignment="center middle">
+        <BackgroundImage url="ghost_list.png" description="ghost list background" />
+        <vstack height="100%" width="100%" gap="medium" alignment="top center" padding="medium">
+          <hstack gap="small" alignment="center middle">
+            <BackButton onPress={onBack} label="Back"/>
+            <TextBlock size="xlarge" weight="bold" text={`Ghost ${ghostIndex + 1} of ${ghosts.length}`} />
+          </hstack>
+          <GhostInfoBlock ghost={ghost} />
+          <NavigationButtons onPrevious={onPrevious} onNext={onNext} />
+        </vstack>
+      </zstack>
     );
   };
