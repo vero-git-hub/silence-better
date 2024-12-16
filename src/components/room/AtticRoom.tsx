@@ -8,6 +8,7 @@ export const AtticScreen = ({
     onHintActivate,
     goToBasement,
     goToLivingRoom,
+    onExit,
   }: {
     noiseLevel: number;
     usedHint: boolean;
@@ -15,6 +16,7 @@ export const AtticScreen = ({
     onHintActivate: () => void;
     goToBasement: () => void;
     goToLivingRoom: () => void;
+    onExit: () => void;
   }) => {
     return (
       <RoomLayout
@@ -27,6 +29,7 @@ export const AtticScreen = ({
           { label: "Open a box", onPress: onHintActivate },
           { label: "Go back to basement", onPress: goToBasement },
           { label: "Go to living room", onPress: goToLivingRoom },
+          { label: "Exit Game", onPress: onExit },
       ]}
       />
     );

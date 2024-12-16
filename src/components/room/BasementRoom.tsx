@@ -9,6 +9,7 @@ export const BasementScreen = ({
     onGoToLivingRoom,
     onGoToAttic,
     onGuess,
+    onExit,
   }: {
     noiseLevel: number;
     usedHint: boolean;
@@ -17,6 +18,7 @@ export const BasementScreen = ({
     onGoToLivingRoom: () => void;
     onGoToAttic: () => void;
     onGuess: () => void;
+    onExit: () => void;
   }) => {
     return (
       <RoomLayout
@@ -31,6 +33,7 @@ export const BasementScreen = ({
         { label: "Look around", onPress: onLookAround },
         { label: "Go to the living room", onPress: onGoToLivingRoom },
         { label: "Go to the attic", onPress: onGoToAttic },
+        { label: "Exit Game", onPress: onExit },
       ]}
     />
     );

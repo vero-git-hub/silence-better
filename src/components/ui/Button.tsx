@@ -50,3 +50,9 @@ export const RenderActionButton = ({ action, index }: { action: { onPress: () =>
       {action.label}
     </button>
   );
+
+export const ExitGameButton = ({ onPress }: { onPress: () => void }) => (
+  <button appearance="secondary" onPress={onPress}>
+    Exit Game
+  </button>
+);

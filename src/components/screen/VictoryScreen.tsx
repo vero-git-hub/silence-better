@@ -1,16 +1,18 @@
 import { Devvit } from "@devvit/public-api";
 import { BackgroundImage } from "../ui/Image.js";
-import { PrimaryButton, SecondaryButton } from "../ui/Button.js";
+import { ExitGameButton, PlayAgainButton, SecondaryButton } from "../ui/Button.js";
 import { TextBlock } from "../ui/TextBlock.js";
 
 export const VictoryScreen = ({
   ghostName,
   onPlayAgain,
   onShareResults,
+  onExit,
 }: {
   ghostName: string;
   onPlayAgain: () => void;
   onShareResults: () => Promise<void>;
+  onExit: () => void;
 }) => {
   return (
     <zstack height="100%" width="100%" alignment="center middle">
@@ -27,7 +29,8 @@ export const VictoryScreen = ({
           color="white"
           text={`The ghost was ${ghostName}.`}
         />
-        <PrimaryButton onPress={onPlayAgain} label="Play Again" />
+        <PlayAgainButton onPress={onPlayAgain} />
+        <ExitGameButton onPress={onExit} />
         <SecondaryButton
           onPress={() =>
             onShareResults().catch((error) => {

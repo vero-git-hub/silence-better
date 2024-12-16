@@ -8,6 +8,7 @@ export const LivingRoomScreen = ({
     onHintActivate,
     goToBasement,
     goToAttic,
+    onExit,
   }: {
     noiseLevel: number;
     usedLivingRoomHint: boolean;
@@ -15,6 +16,7 @@ export const LivingRoomScreen = ({
     onHintActivate: () => void;
     goToBasement: () => void;
     goToAttic: () => void;
+    onExit: () => void;
   }) => {
     return (
       <RoomLayout
@@ -27,6 +29,7 @@ export const LivingRoomScreen = ({
           { label: "Sit on the sofa", onPress: onHintActivate },
           { label: "Back to the basement", onPress: goToBasement },
           { label: "Go to the attic", onPress: goToAttic },
+          { label: "Exit Game", onPress: onExit },
         ]}
     />
     );

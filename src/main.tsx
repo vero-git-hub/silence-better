@@ -99,6 +99,16 @@ Devvit.addCustomPostType({
       setUsedAtticHint(false);
     }
 
+    function exitGame() {
+      setScreen('start');
+      setNoiseLevel(0);
+      setUsedBasementHint(false);
+      setUsedLivingRoomHint(false);
+      setUsedAtticHint(false);
+      setChosenGhostIndex(null);
+      setRandomizedClues([]);
+    } 
+
     async function shareResults(context: any, message: string) {
       const { reddit, ui, postId } = context;
     
@@ -162,7 +172,6 @@ Devvit.addCustomPostType({
         <RulesScreen onBack={() => setScreen('start')}
         />
       );
-
     } else if (screen === 'basement') {
       return (
         <BasementScreen
@@ -178,27 +187,31 @@ Devvit.addCustomPostType({
           onGoToLivingRoom={() => goToRoom('living_room')}
           onGoToAttic={() => goToRoom('attic')}
           onGuess={() => setScreen('guess')}
+          onExit={exitGame}
         />
       );
     } else if (screen === 'guess') {
-        return (
-          <GuessScreen
-            ghosts={ghosts}
-            onSelectGhost={handleSelectGhost}
-            onBack={() => setScreen('basement')}
-          />
-        );
+      return (
+        <GuessScreen
+          ghosts={ghosts}
+          onSelectGhost={handleSelectGhost}
+          onBack={() => setScreen('basement')}
+        />
+      );
     } else if (screen === 'victory') {
-        return (
-          <VictoryScreen
-            ghostName={ghosts[chosenGhostIndex!].name}
-            onPlayAgain={() => setScreen("start")}
-            onShareResults={handleShareResults}
-          />
-        );
+      return (
+        <VictoryScreen
+          ghostName={ghosts[chosenGhostIndex!].name}
+          onPlayAgain={() => setScreen("start")}
+          onShareResults={handleShareResults}
+          onExit={exitGame}
+        />
+      );
     } else if (screen === 'ghost_victory') {
       return (
-        <GhostVictoryScreen onPlayAgain={() => setScreen("start")}
+        <GhostVictoryScreen
+          onPlayAgain={() => setScreen("start")}
+          onExit={exitGame}
         />
       );
     } else if (screen === 'living_room') {
@@ -217,6 +230,7 @@ Devvit.addCustomPostType({
           }}
           goToBasement={() => goToRoom("basement")}
           goToAttic={() => goToRoom("attic")}
+          onExit={exitGame}
         />
       );
     } else if (screen === 'attic') {
@@ -236,11 +250,15 @@ Devvit.addCustomPostType({
           }}
           goToBasement={() => goToRoom("basement")}
           goToLivingRoom={() => goToRoom("living_room")}
+          onExit={exitGame}
         />
       );
     } else if (screen === 'defeat') {
       return (
-        <DefeatScreen onPlayAgain={() => setScreen('start')} />
+        <DefeatScreen 
+          onPlayAgain={() => setScreen('start')} 
+          onExit={exitGame}
+        />
       );
     }
     return (
