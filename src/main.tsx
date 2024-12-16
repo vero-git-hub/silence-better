@@ -169,7 +169,9 @@ Devvit.addCustomPostType({
       );
     } else if (screen === 'rules') {
       return (
-        <RulesScreen onBack={() => setScreen('start')}
+        <RulesScreen 
+          onBack={() => setScreen('start')}
+          context={_context}
         />
       );
     } else if (screen === 'basement') {
