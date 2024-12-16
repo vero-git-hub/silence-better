@@ -1,7 +1,8 @@
 import { Devvit } from "@devvit/public-api";
 import { GhostInfo } from "../../types.js";
-import { NavigationButtons } from "../ui/Button.js";
+import { BackButton, NavigationButtons } from "../ui/Button.js";
 import { GhostInfoBlock } from "../GhostDetails.js";
+import { TextBlock } from "../ui/TextBlock.js";
 
 export const GhostListScreen = ({
     ghostIndex,
@@ -21,12 +22,8 @@ export const GhostListScreen = ({
     return (
       <vstack height="100%" width="100%" gap="medium" alignment="top center" padding="medium">
       <hstack gap="small" alignment="center middle">
-        <button appearance="secondary" onPress={onBack}>
-          Back
-        </button>
-        <text size="xlarge" weight="bold">
-          Ghosts Information
-        </text>
+        <BackButton onPress={onBack} label="Back"/>
+        <TextBlock size="xlarge" weight="bold" text={`Ghost ${ghostIndex + 1} of ${ghosts.length}`} />
       </hstack>
       <spacer size="medium" />
       <GhostInfoBlock ghost={ghost} />

@@ -9,6 +9,7 @@ import { GhostVictoryScreen } from './components/screen/GhostVictoryScreen.js';
 import { BasementScreen } from './components/room/BasementRoom.js';
 import { LivingRoomScreen } from './components/room/LivingRoom.js';
 import { AtticScreen } from './components/room/AtticRoom.js';
+import { DefeatScreen } from './components/screen/DefeatScreen.js';
 
 Devvit.configure({
   redditAPI: true,
@@ -183,10 +184,10 @@ Devvit.addCustomPostType({
           />
         );
     } else if (screen === 'ghost_victory') {
-        return (
-          <GhostVictoryScreen onPlayAgain={() => setScreen("start")}
-          />
-        );
+      return (
+        <GhostVictoryScreen onPlayAgain={() => setScreen("start")}
+        />
+      );
     } else if (screen === 'living_room') {
       return (
         <LivingRoomScreen
@@ -226,14 +227,7 @@ Devvit.addCustomPostType({
       );
     } else if (screen === 'defeat') {
       return (
-        <blocks>
-          <text size="large" weight="bold" color="red">
-            You made too much noise... Game Over.
-          </text>
-          <button appearance="primary" onPress={() => setScreen('start')}>
-            Restart
-          </button>
-        </blocks>
+        <DefeatScreen onPlayAgain={() => setScreen('start')} />
       );
     }
     return (

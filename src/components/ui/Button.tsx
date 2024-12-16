@@ -23,9 +23,9 @@ export const GhostButton = ({ ghost, onPress }: { ghost: { name: string }; onPre
   </button>
 );
 
-export const BackButton = ({ onPress }: { onPress: () => void }) => (
+export const BackButton = ({ onPress, label }: { onPress: () => void; label: string; }) => (
   <button appearance="secondary" onPress={onPress}>
-    Back to the basement
+    {label}
   </button>
 );
 
