@@ -3,6 +3,7 @@ import { BackgroundImage } from "./ui/Image.js";
 import { PrimaryButton, RenderActionButton } from "./ui/Button.js";
 import { TextBlock } from "./ui/TextBlock.js";
 import { NoiseBar } from "./NoiseBar.js";
+import { HintBox } from "./HintBox.js";
 
 export const RoomLayout = ({
     backgroundImage,
@@ -43,11 +44,7 @@ export const RoomLayout = ({
                 <PrimaryButton onPress={onPrimaryAction} label={primaryActionLabel} />
               </hstack>
             ) : null}
-            {hint != null && hint !== "" && (
-              <text size="medium" color="yellow">
-                {hint}
-              </text>
-            )}
+            <HintBox hint={hint || ""} />
           </vstack>
         </zstack>
       );

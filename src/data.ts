@@ -42,7 +42,7 @@ export const rulesPages = [
       "2. Explore Rooms: Navigate between the basement, living room, and attic.", 
       "3. Gather Clues: Use the actions in each room to find clues.",
       "4. Noise Level: Gathering clues or moving between rooms", "that you’ve already used hints increases noise.",
-      "5. Guess the Ghost: Use the 'Guess the Ghost' button.",
+      "5. Guess the Ghost: Use the 'Guess the Ghost' button in the basement.",
     ],
     [
       "Choose wisely—an incorrect guess means the ghost wins!",
