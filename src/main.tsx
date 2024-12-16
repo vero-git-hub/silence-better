@@ -64,18 +64,23 @@ Devvit.addCustomPostType({
     }
 
     function goToRoom(newRoom: 'basement' | 'living_room' | 'attic') {
-      setScreen((oldRoom) => {
-        if (oldRoom !== 'start') {
-          if (newRoom === 'basement' && usedBasementHint) {
-            increaseNoise(1); 
-          } else if (newRoom === 'living_room' && usedLivingRoomHint) {
-            increaseNoise(1);
-          } else if (newRoom === 'attic' && usedAtticHint) {
-            increaseNoise(1);
-          }
-        }
-        return newRoom;
-      });
+      let increment = 0;
+      if (newRoom === 'basement' && usedBasementHint) {
+        increment = 1;
+      } else if (newRoom === 'living_room' && usedLivingRoomHint) {
+        increment = 1;
+      } else if (newRoom === 'attic' && usedAtticHint) {
+        increment = 1;
+      }
+
+      const newNoiseLevel = noiseLevel + increment;
+      if (newNoiseLevel > 5) {
+        setScreen('defeat');
+        return;
+      }
+
+      setNoiseLevel(newNoiseLevel);
+      setScreen(newRoom);
     }
 
     function startGame() {
