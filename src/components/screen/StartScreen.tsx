@@ -1,6 +1,6 @@
 import { Devvit } from "@devvit/public-api";
 import { PrimaryButton, SecondaryButton } from "../ui/Button.js";
-import { LogoImage } from "../ui/Image.js";
+import { BackgroundImage } from "../ui/Image.js";
 import { TextBlock } from "../ui/TextBlock.js";
 
 export const StartScreen = ({
@@ -11,14 +11,33 @@ export const StartScreen = ({
   onStartGame: () => void;
   onViewGhosts: () => void;
   onViewRules: () => void;
-}) => (
-  <vstack height="100%" width="100%" gap="medium" alignment="center middle">
-    <LogoImage url="silent_better.png" description="logo" />
-    <TextBlock size="large" weight="bold" text="Welcome to Silence Better Game!" />
-    <PrimaryButton onPress={onStartGame} label="Start Game" />
-    <hstack>
-      <SecondaryButton onPress={onViewGhosts} label="View Ghosts" />
-      <SecondaryButton onPress={onViewRules} label="View Rules" />
-    </hstack>
-  </vstack>
-);
+}) => {
+  return (
+    <zstack height="100%" width="100%" alignment="center middle">
+    <BackgroundImage url="start.png" description="start screen background" />
+      <vstack
+        backgroundColor="rgba(0, 0, 0, 0.6)"
+        cornerRadius="large"
+        padding="large"
+        gap="medium"
+        alignment="middle center"
+        width="60%"
+      >
+        <TextBlock
+          size="xlarge"
+          weight="bold"
+          color="white"
+          text="Welcome to Silence Better Game!"
+        />
+        <PrimaryButton
+          onPress={onStartGame}
+          label="Start Game"
+        />
+        <hstack gap="medium" alignment="middle center">
+          <SecondaryButton onPress={onViewGhosts} label="View Ghosts" />
+          <SecondaryButton onPress={onViewRules} label="View Rules" />
+        </hstack>
+      </vstack>
+    </zstack>
+  );
+};

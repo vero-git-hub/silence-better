@@ -24,12 +24,20 @@ export const LogoImage = ({ url, description }: { url: string; description: stri
 );
 
 export const GhostImage = ({ url, description }: { url: string; description: string }) => (
-  <image
-    url={url}
-    description={description}
-    imageWidth={256}
-    imageHeight={256}
-    width="160px"
-    height="170px"
-  />
+  <zstack alignment="center middle" width="170px" height="180px">
+    <vstack
+      width="100%"
+      height="100%"
+      backgroundColor="#fff"
+      cornerRadius="medium"
+    />
+    <image
+      url={url}
+      description={description}
+      imageWidth={256}
+      imageHeight={256}
+      width="160px"
+      height="170px"
+    />
+  </zstack>
 );

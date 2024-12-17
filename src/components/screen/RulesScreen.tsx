@@ -15,11 +15,18 @@ export const RulesScreen = ({
 
   return (
     <zstack height="100%" width="100%" alignment="center middle">
-      <BackgroundImage url="rules.png" description="rules background" />
-      <vstack gap="medium" alignment="top center" padding="medium" width="90%">
-        <TextBlock size="large" weight="bold" color="black" text="Rules of Silence Better Game" />
+      <BackgroundImage url="rules_screen.png" description="rules background" />
+      <vstack 
+        backgroundColor="rgba(0, 0, 0, 0.6)"
+        cornerRadius="large"
+        padding="large"
+        gap="medium"
+        alignment="middle center"
+        width="90%"
+      >
+        <TextBlock size="large" weight="bold" color="#FFD700" text="Rules of Silence Better Game" />
         {rulesPages[currentPage].map((text, index) => (
-          <text key={`rule_${currentPage}_${index}`} size="medium" color="black">
+          <text key={`rule_${currentPage}_${index}`} size="medium" color="white">
             {text}
           </text>
         ))}
